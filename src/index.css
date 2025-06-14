@@ -311,3 +311,47 @@ main h2 {
     font-size: 16px; /* Prevents zoom on iOS */
   }
 }
+
+/* 🎓 LEARNING: CSS for Success/Error Messages */
+.message {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.message.success {
+  background-color: #1a4d3a;
+  color: #4ade80;
+  border: 1px solid #22c55e;
+}
+
+.message.error {
+  background-color: #4d1a1a;
+  color: #f87171;
+  border: 1px solid #ef4444;
+}
+
+/* 🎓 LEARNING: Disabled Button States */
+.submit-button:disabled {
+  background: linear-gradient(135deg, #6b6b6b, #4a4a4a);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-button:disabled:hover {
+  background: linear-gradient(135deg, #6b6b6b, #4a4a4a);
+  transform: none;
+  box-shadow: none;
+}
+
+/* 🎓 LEARNING: Disabled Input States */
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background-color: #2a1e3e;
+  color: #8a7a9a;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

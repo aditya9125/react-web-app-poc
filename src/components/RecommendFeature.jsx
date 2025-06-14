@@ -6,28 +6,59 @@ export default function RecommendFeature() {
   const [contentName, setContentName] = useState('');
   const [platformName, setPlatformName] = useState('');
   const [specificReason, setSpecificReason] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     
-    console.log('RECOMMEND submitted:', {
-      contentName,
-      platformName,
-      specificReason
-    });
+    setIsLoading(true);
+    setMessage('');
     
-    alert(`Recommendation submitted!\nContent: ${contentName}\nPlatform: ${platformName}\nReason: ${specificReason}`);
-    
-    // Reset form
-    setContentName('');
-    setPlatformName('');
-    setSpecificReason('');
+    try {
+      const response = await fetch('http://localhost:3001/api/recommendations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentName,
+          platformName,
+          specificReason
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(`✅ ${data.message}`);
+        console.log('Recommendation saved to database:', data.data);
+        
+        // Reset form
+        setContentName('');
+        setPlatformName('');
+        setSpecificReason('');
+      } else {
+        setMessage(`❌ Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      setMessage('❌ Network error. Please check if the server is running.');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="feature-form">
       <h3>Recommend Content</h3>
       <p>Recommend content to others and tell them why they should watch it!</p>
+      
+      {message && (
+        <div className={`message ${message.includes('✅') ? 'success' : 'error'}`}>
+          {message}
+        </div>
+      )}
       
       <form onSubmit={handleSubmit} className="recommend-form">
         <div className="form-group">
@@ -40,6 +71,7 @@ export default function RecommendFeature() {
             onChange={(e) => setContentName(e.target.value)}
             placeholder="Enter movie/show/content name..."
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -53,6 +85,7 @@ export default function RecommendFeature() {
             onChange={(e) => setPlatformName(e.target.value)}
             placeholder="Enter platform (Netflix, Amazon Prime, etc.)..."
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -66,11 +99,16 @@ export default function RecommendFeature() {
             placeholder="Why should others watch this content?..."
             rows="4"
             required
+            disabled={isLoading}
           />
         </div>
 
-        <button type="submit" className="submit-button">
-          Submit Recommendation
+        <button 
+          type="submit" 
+          className="submit-button"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Submitting...' : 'Submit Recommendation'}
         </button>
       </form>
     </div>
