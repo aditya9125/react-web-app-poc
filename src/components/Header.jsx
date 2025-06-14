@@ -1,4 +1,4 @@
-import image_ReactCoreConcepts from '../assets/react-core-concepts.png'
+import image_ReactCoreConcepts from '../assets/react-core-features.png'
 import genRandomInt from '../support/utils';
 import './Header.css'
 
